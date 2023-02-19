@@ -1,0 +1,102 @@
+package Visuals;
+
+import Logic.GameBoard;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public class Board extends JComponent {
+    public int X = 600;
+    public int Y = 300;
+    private int penRadius = (X+Y)/400;
+    private boolean init = false;
+    private Logic.GameBoard gameBoard = new GameBoard(10, 10);
+
+    BufferedImage aircraftX;
+
+    public Board(int X, int Y){
+        this.X=X;
+        this.Y=Y;
+    }
+    public void setDimension(int width, int height) {
+        X = width;
+        Y = height;
+    }
+
+
+    protected void paintComponent(Graphics g){
+        if(!init) {
+            setupImages();
+            init = true;
+        }
+
+        Graphics2D g2d = (Graphics2D)g;
+        /*
+         *Gradient drawing
+         */
+        boolean gradientUp = true;
+        int gradientRange = 100; //must be <255
+        for(int i = 0; i < 1000; i++) {
+            if(gradientUp) {
+                if(i%gradientRange == 0) {
+                    gradientUp = false;
+                }
+                g2d.setColor(new Color(0, 0, 255-gradientRange + (i % gradientRange)));//
+            }else{
+                if(i%gradientRange == 0) {
+                    gradientUp = true;
+                }
+                g2d.setColor(new Color(0, 0, (255) - (i % gradientRange)));
+            }
+
+            g2d.fillRect(i*X/1000, 0, 10, Y);
+            g2d.setColor(Color.BLACK);
+        }
+        /*
+        Draw a 10 x 10 grid
+         */
+        g2d.setStroke(new BasicStroke((float)(penRadius), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        for(int i = 1; i < 10; i++){
+            g2d.drawLine(i*(X/10), 0, i*(X/10), Y);
+            g2d.drawLine(0, i*(Y/10), X, i*(Y/10));
+        }
+
+
+        g2d.scale(((double)X / 1000.0), ((double)Y / 1000.0));
+        g2d.drawImage(aircraftX,0,0,null);
+        g2d.scale(1000.0/X, 1000.0/Y);
+        for(int i = 0; i < 100; i++){
+            if(gameBoard.getBoard(i/10,i%10) == 0) {
+                g2d.setColor(Color.BLACK);
+                g2d.fillOval(((i % 10) * (X / 10)) + (X / 25), (i / 10) * (Y / 10) + Y / 25, X / 50, Y / 50); //making the dots
+            }
+            else {
+                g2d.setColor(Color.red);
+                g2d.fillOval(((i % 10) * (X / 10)) + (X / 35), (i / 10) * (Y / 10) + Y / 35, X / 22, Y / 22);
+                g2d.setColor(Color.YELLOW);
+                g2d.fillOval(((i % 10) * (X / 10)) + (X / 25), (i / 10) * (Y / 10) + Y / 25, X / 40, Y / 40);
+
+            }
+        }
+
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, X, Y);
+    }
+
+    public void drawShip(Graphics2D g2d){
+        g2d.drawImage(aircraftX, 0, 0, null);
+    }
+
+    public void setupImages(){
+        try {
+            aircraftX = ImageIO.read(new File("src\\Visuals\\Aircraftcarrier.png"));
+        } catch (IOException e) {
+            System.out.println("Missing images!");;
+        }
+    }
+
+}
