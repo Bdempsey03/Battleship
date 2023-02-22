@@ -1,5 +1,7 @@
 package Visuals;
 
+import Logic.GameBoard;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -10,14 +12,29 @@ public class GUI {
     private int X = 600;
     private int Y = 400;
 
-    protected Board userBoard = new Board(X, Y);
-    protected Board cpuBoard = new Board(X, Y);
-    protected ControlPanel ctrlPanel = new ControlPanel(X, Y);
+
+    private GameBoard humanGameBoard;
+    private GameBoard cpuGameBoard;
+
+
+    protected Board humanBoard;
+    protected Board cpuBoard;
+    protected ControlPanel ctrlPanel;
+
+    public GUI(GameBoard humanGameBoard, GameBoard cpuGameBoard){
+        this.humanGameBoard = humanGameBoard;
+        humanBoard = new Board(X, Y, humanGameBoard);
+        cpuBoard = new Board(X, Y, cpuGameBoard);
+        ctrlPanel = new ControlPanel(X, Y);
+        humanBoard.repaint();
+        cpuBoard.repaint();
+        ctrlPanel.repaint();
+    }
 
     public void setup(){
         frame.setSize(X, Y);
         frame.setLayout(null);
-        frame.add(userBoard);
+        frame.add(humanBoard);
         frame.add(cpuBoard);
         frame.add(ctrlPanel);
 
@@ -29,19 +46,28 @@ public class GUI {
             public void componentResized(ComponentEvent componentEvent) {
                 X=frame.getContentPane().getWidth();
                 Y=frame.getContentPane().getHeight();
-                userBoard.setDimension(X/2, 3*Y/4);
+                humanBoard.setDimension(X/2, 3*Y/4);
                 cpuBoard.setDimension(X/2, 3*Y/4);
                 ctrlPanel.setDimension(X,Y/4);
-                userBoard.setBounds(0, 0, X/2, 3*Y/4);
+                humanBoard.setBounds(0, 0, X/2, 3*Y/4);
                 cpuBoard.setBounds(X/2, 0, X/2, 3*Y/4);
                 ctrlPanel.setBounds(0, 3*Y/4, X, Y/4);
+                ctrlPanel.setPanelText( "CPU missed at h-4");
 
                 ctrlPanel.repaint();
                 cpuBoard.repaint();
-                userBoard.repaint();
+                humanBoard.repaint();
             }
         });
     }
 
 
+    public void repaint() {
+        ctrlPanel.repaint();
+        cpuBoard.repaint();
+        humanBoard.repaint();
+    }
+    public ControlPanel getCtrl(){
+        return ctrlPanel;
+    }
 }

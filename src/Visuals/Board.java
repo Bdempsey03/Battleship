@@ -1,5 +1,6 @@
 package Visuals;
 
+import Logic.Game;
 import Logic.GameBoard;
 
 import javax.imageio.ImageIO;
@@ -14,11 +15,12 @@ public class Board extends JComponent {
     public int Y = 300;
     private int penRadius = (X+Y)/400;
     private boolean init = false;
-    private Logic.GameBoard gameBoard = new GameBoard(10, 10);
+    private Logic.GameBoard gameBoard;
 
     BufferedImage aircraftX;
 
-    public Board(int X, int Y){
+    public Board(int X, int Y, GameBoard board){
+        this.gameBoard = board;
         this.X=X;
         this.Y=Y;
     }
@@ -70,6 +72,7 @@ public class Board extends JComponent {
         g2d.drawImage(aircraftX,0,0,null);
         g2d.scale(1000.0/X, 1000.0/Y);
         for(int i = 0; i < 100; i++){
+            System.out.println(gameBoard);
             if(gameBoard.getBoard(i/10,i%10) == 0) {
                 g2d.setColor(Color.BLACK);
                 g2d.fillOval(((i % 10) * (X / 10)) + (X / 25), (i / 10) * (Y / 10) + Y / 25, X / 50, Y / 50); //making the dots

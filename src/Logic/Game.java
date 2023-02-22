@@ -1,11 +1,25 @@
 package Logic;
 
-import Visuals.GUI;
-
 public class Game {
+    GameBoard humanGameBoard;
+    GameBoard cpuGameBoard;
+    Player cpu;
+    Player human;
 
-    public static void main(String[] args) {
-        GUI gui = new GUI();
-        gui.setup();
+    public Game(){
+        humanGameBoard = new GameBoard(10, 10);
+        cpuGameBoard = new GameBoard(10, 10);
+        cpu = new CPU(this);
+        human = new Human(this);
+    }
+
+
+    public GameBoard getHumanBoard(){
+        return this.humanGameBoard;
+    }
+
+
+    public GameBoard getCpuBoard() {
+        return cpuGameBoard;
     }
 }
