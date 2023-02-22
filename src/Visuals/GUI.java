@@ -21,11 +21,16 @@ public class GUI {
     protected Board cpuBoard;
     protected ControlPanel ctrlPanel;
 
+    protected JTextArea textBox;
+
     public GUI(GameBoard humanGameBoard, GameBoard cpuGameBoard){
         this.humanGameBoard = humanGameBoard;
         humanBoard = new Board(X, Y, humanGameBoard);
         cpuBoard = new Board(X, Y, cpuGameBoard);
         ctrlPanel = new ControlPanel(X, Y);
+        textBox = new JTextArea("Test");
+        textBox.setVisible(true);
+        textBox.repaint();
         humanBoard.repaint();
         cpuBoard.repaint();
         ctrlPanel.repaint();
@@ -37,6 +42,7 @@ public class GUI {
         frame.add(humanBoard);
         frame.add(cpuBoard);
         frame.add(ctrlPanel);
+        frame.add(textBox);
 
 
         frame.setVisible(true);
@@ -48,21 +54,20 @@ public class GUI {
                 Y=frame.getContentPane().getHeight();
                 humanBoard.setDimension(X/2, 3*Y/4);
                 cpuBoard.setDimension(X/2, 3*Y/4);
-                ctrlPanel.setDimension(X,Y/4);
+                ctrlPanel.setDimension(3*X/4,Y/4);
+                textBox.setSize(X/4, Y/4);
+                textBox.setBounds(X, Y*3/4, X/4, Y/4);
                 humanBoard.setBounds(0, 0, X/2, 3*Y/4);
                 cpuBoard.setBounds(X/2, 0, X/2, 3*Y/4);
-                ctrlPanel.setBounds(0, 3*Y/4, X, Y/4);
-                ctrlPanel.setPanelText( "CPU missed at h-4");
-
-                ctrlPanel.repaint();
-                cpuBoard.repaint();
-                humanBoard.repaint();
+                ctrlPanel.setBounds(X/4, 3*Y/4, X, Y/4);
+                repaint();
             }
         });
     }
 
 
     public void repaint() {
+        textBox.repaint();
         ctrlPanel.repaint();
         cpuBoard.repaint();
         humanBoard.repaint();
@@ -70,4 +75,5 @@ public class GUI {
     public ControlPanel getCtrl(){
         return ctrlPanel;
     }
+    public JTextArea getTextBox(){return textBox;}
 }

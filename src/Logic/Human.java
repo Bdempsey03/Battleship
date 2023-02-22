@@ -10,7 +10,7 @@ public class Human implements Player{
     }
     @Override
     public void fire(Move move){
-        board.setBoard(move.getRow(),move.getColumn(), 1);
+        board.setBoard(move.getRow(),move.getColumn(), true);
     }
 
 }

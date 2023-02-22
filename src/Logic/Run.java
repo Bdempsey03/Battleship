@@ -18,11 +18,27 @@ public class Run {
     }
 
     public void go() {
+        int[] shipMaker = new int[4];
+
+
         humanTurn = true;
         game = new Game();//makes board, cpu, player
         gui = new GUI(game.getHumanBoard(), game.getCpuBoard()); //make gui
         gui.setup();
 
+        gui.getCtrl().setPanelText("Please select locations for you ships!\n start of ship x:");
+        gui.repaint();
+        shipMaker[0] = sc.nextInt();
+        gui.getCtrl().setPanelText("Please select locations for you ships!\n start of ship y:");
+        gui.repaint();
+        shipMaker[1] = sc.nextInt();
+        gui.getCtrl().setPanelText("Please select locations for you ships!\n orientation:");
+        gui.repaint();
+        shipMaker[2] = sc.nextInt();
+        gui.getCtrl().setPanelText("Please select locations for you ships!\n length:");
+        shipMaker[3] = sc.nextInt();
+        game.humanGameBoard.addShip(shipMaker[0], shipMaker[1], shipMaker[2], shipMaker[3]);
+        gui.repaint();
 
 
         while (true) {//change to win condition later
@@ -40,8 +56,8 @@ public class Run {
                 game.cpu.fire(newestMove);
             }
             String hitOrMissed = "hit";
-            if(humanTurn)
-                gui.getCtrl().setPanelText("Human " + hitOrMissed + " at " + newestMove);
+            String turn = humanTurn?"Human ":"CPU ";
+            gui.getCtrl().setPanelText(turn + hitOrMissed + " at " + newestMove);
             gui.repaint();
             humanTurn=!humanTurn;
         }

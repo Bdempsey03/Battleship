@@ -6,6 +6,7 @@ import Logic.GameBoard;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -67,22 +68,38 @@ public class Board extends JComponent {
             g2d.drawLine(0, i*(Y/10), X, i*(Y/10));
         }
 
-
-        g2d.scale(((double)X / 1000.0), ((double)Y / 1000.0));
-        g2d.drawImage(aircraftX,0,0,null);
-        g2d.scale(1000.0/X, 1000.0/Y);
-        for(int i = 0; i < 100; i++){
-            System.out.println(gameBoard);
-            if(gameBoard.getBoard(i/10,i%10) == 0) {
+        /* Drawing ships */
+        for(int i = 0; i < 100; i++) {
+            int x = (gameBoard.getBoard(i / 10, i % 10).status);
+            if (x==2||x==3||x==4||x==5||x==6||x==7||x==8||x==9) {
                 g2d.setColor(Color.BLACK);
-                g2d.fillOval(((i % 10) * (X / 10)) + (X / 25), (i / 10) * (Y / 10) + Y / 25, X / 50, Y / 50); //making the dots
+                g2d.fillRect(i/10 * (X/10) , i%10 * (Y/10), X/10, Y/10);
+            }
+        }
+
+//        g2d.scale(((double)X / 1000.0), ((double)Y / 1000.0));
+//        g2d.drawImage(aircraftX,0,0,null);
+//        g2d.scale(1000.0/X, 1000.0/Y);
+        for(int i = 0; i < 100; i++){
+            if(!gameBoard.getBoard(i/10,i%10).hit) { //not shot at
+                g2d.setColor(Color.BLACK);
+                g2d.fillOval(((i / 10) * (X / 10)) + (X / 25), (i % 10) * (Y / 10) + Y / 25, X / 50, Y / 50); //making the dots
             }
             else {
-                g2d.setColor(Color.red);
-                g2d.fillOval(((i % 10) * (X / 10)) + (X / 35), (i / 10) * (Y / 10) + Y / 35, X / 22, Y / 22);
-                g2d.setColor(Color.YELLOW);
-                g2d.fillOval(((i % 10) * (X / 10)) + (X / 25), (i / 10) * (Y / 10) + Y / 25, X / 40, Y / 40);
-
+                if(gameBoard.getBoard(i/10, i%10).hit && gameBoard.getBoard(i/10, i%10).status == 1) {//shot at and a miss
+                    g2d.setColor(Color.white);
+                    g2d.fillOval(((i / 10) * (X / 10)) + (X / 35), (i % 10) * (Y / 10) + Y / 35, X / 20, Y / 20);
+                    g2d.setColor(Color.gray);
+                    g2d.fillOval(((i / 10) * (X / 10)) + (X / 25), (i % 10) * (Y / 10) + Y / 25, X / 40, Y / 40);
+                }
+                else{
+                    if(gameBoard.getBoard(i/10, i%10).hit && gameBoard.getBoard(i/10, i%10).status != 1){
+                        g2d.setColor(Color.red);
+                        g2d.fillOval(((i / 10) * (X / 10)) + (X / 35), (i % 10) * (Y / 10) + Y / 35, X / 20, Y / 20);
+                        g2d.setColor(Color.orange);
+                        g2d.fillOval(((i / 10) * (X / 10)) + (X / 25), (i % 10) * (Y / 10) + Y / 25, X / 40, Y / 40);
+                    }
+                }
             }
         }
 

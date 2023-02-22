@@ -7,8 +7,8 @@ public class Game {
     Player human;
 
     public Game(){
-        humanGameBoard = new GameBoard(10, 10);
-        cpuGameBoard = new GameBoard(10, 10);
+        humanGameBoard = new GameBoard(10, 10, true);
+        cpuGameBoard = new GameBoard(10, 10, false);
         cpu = new CPU(this);
         human = new Human(this);
     }
