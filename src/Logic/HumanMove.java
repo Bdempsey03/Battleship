@@ -7,6 +7,10 @@ public class HumanMove implements Move {
     public HumanMove(int row, int column){
         this.row = row; // a -> 1. b -> 2, etc
         this.column = column;
+        if(row < 0 || row > 9 || column < 0 || column > 9){//if invalid move then move is 0, 0 for now
+            this.row = 0;
+            this.column = 0;
+        }
         }
 
     @Override

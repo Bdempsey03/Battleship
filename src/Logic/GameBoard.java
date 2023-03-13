@@ -1,6 +1,7 @@
 package Logic;
 
 
+
 public class GameBoard {
 /*
 Key:
@@ -19,6 +20,14 @@ Key:
     private Tile[][] board;
     private boolean isHuman;
 
+    public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
+    public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
+    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+    public static final String ANSI_RESET = "\u001B[0m";
+
+
+
+
     public GameBoard(int x, int y, boolean isHuman){
         board = new Tile[x][y];
         this.isHuman = isHuman;
@@ -32,6 +41,8 @@ Key:
       }
 
     public Tile getBoard(int x, int y) {
+        if(x<0||x>9||y<0||y>9)
+            return null;
         return board[x][y];
     }
 
@@ -77,4 +88,25 @@ Key:
             }
         }
     }
+    public String toString(){
+        String s = "";
+
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++) {
+                if(board[i][j].isHit())
+                    s+=ANSI_RED_BACKGROUND;
+                else
+                    s+=ANSI_BLUE_BACKGROUND;
+                s +="[" + board[i][j] + "]" + ANSI_RESET;
+            }
+            s+="\n";
+        }
+
+
+        return s;
+    }
+    public boolean isHuman(){
+        return isHuman;
+    }
+
 }

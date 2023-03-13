@@ -18,6 +18,7 @@ public class Board extends JComponent {
     private boolean init = false;
     private Logic.GameBoard gameBoard;
 
+
     BufferedImage aircraftX;
 
     public Board(int X, int Y, GameBoard board){
@@ -41,6 +42,11 @@ public class Board extends JComponent {
         /*
          *Gradient drawing
          */
+        int green;
+        if(!gameBoard.isHuman())
+            green = 0;
+        else
+            green = 100;
         boolean gradientUp = true;
         int gradientRange = 100; //must be <255
         for(int i = 0; i < 1000; i++) {
@@ -48,12 +54,12 @@ public class Board extends JComponent {
                 if(i%gradientRange == 0) {
                     gradientUp = false;
                 }
-                g2d.setColor(new Color(0, 0, 255-gradientRange + (i % gradientRange)));//
+                g2d.setColor(new Color(0, green, 255-gradientRange + (i % gradientRange)));//
             }else{
                 if(i%gradientRange == 0) {
                     gradientUp = true;
                 }
-                g2d.setColor(new Color(0, 0, (255) - (i % gradientRange)));
+                g2d.setColor(new Color(0, green, (255) - (i % gradientRange)));
             }
 
             g2d.fillRect(i*X/1000, 0, 10, Y);
@@ -69,11 +75,27 @@ public class Board extends JComponent {
         }
 
         /* Drawing ships */
-        for(int i = 0; i < 100; i++) {
-            int x = (gameBoard.getBoard(i / 10, i % 10).status);
-            if (x==2||x==3||x==4||x==5||x==6||x==7||x==8||x==9) {
-                g2d.setColor(Color.BLACK);
-                g2d.fillRect(i/10 * (X/10) , i%10 * (Y/10), X/10, Y/10);
+        if(!gameBoard.isHuman()) {
+            for (int i = 0; i < 100; i++) {
+                int x = (gameBoard.getBoard(i / 10, i % 10).status);
+                /* IF THE TILE BEFORE X IS NULL THEN WE TREAT IT AS EMPTY, ELSE WE USE IT'S VALUE IN CAMPARISONS */
+                int y = (gameBoard.getBoard((i / 10) - 1, i % 10)) == null ? 1 : (gameBoard.getBoard((i - 1) / 10, i % 10).status);
+                int z = (gameBoard.getBoard((i) / 10, (i % 10) - 1)) == null ? 1 : (gameBoard.getBoard((i - 1) / 10, i % 10).status);
+
+                if ((x == 2 || x == 3 || x == 4 || x == 5 || x == 6 || x == 7 || x == 8 || x == 9))
+//                    &&(y!=x)&&(z!=x))
+                {
+//                drawShip(g2d, i/10 * (X/10) , i%10 * (Y/10));
+                    if (x == 2 || x == 3)
+                        g2d.setColor(Color.ORANGE);
+                    if (x == 4 || x == 5)
+                        g2d.setColor(Color.RED);
+                    if (x == 6 || x == 7)
+                        g2d.setColor(Color.GREEN);
+                    if (x == 8 || x == 9)
+                        g2d.setColor(Color.MAGENTA);
+                    g2d.fillRect(i / 10 * (X / 10), i % 10 * (Y / 10), X / 10, Y / 10);
+                }
             }
         }
 
@@ -107,8 +129,10 @@ public class Board extends JComponent {
         g2d.drawRect(0, 0, X, Y);
     }
 
-    public void drawShip(Graphics2D g2d){
-        g2d.drawImage(aircraftX, 0, 0, null);
+    public void drawShip(Graphics2D g2d, int x, int y){
+        g2d.scale(X/100., Y/100.);
+        g2d.drawImage(aircraftX, x, y, null);
+        g2d.scale(100*X, 100 * Y);
     }
 
     public void setupImages(){
