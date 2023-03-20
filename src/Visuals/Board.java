@@ -136,11 +136,11 @@ public class Board extends JComponent {
     }
 
     public void setupImages(){
-        try {
-            aircraftX = ImageIO.read(new File("src\\Visuals\\Aircraftcarrier.png"));
-        } catch (IOException e) {
-            System.out.println("Missing images!");;
-        }
+//        try {
+//            aircraftX = ImageIO.read(new File("src\\Visuals\\Aircraftcarrier.png"));
+//        } catch (IOException e) {
+//            System.out.println("Missing images in Board!");;
+//        }
     }
 
 }

@@ -27,7 +27,7 @@ public class GUI {
         humanBoard = new Board(X, Y, humanGameBoard);
         cpuBoard = new Board(X, Y, cpuGameBoard);
         ctrlPanel = new ControlPanel(X, Y);
-        text = new TextBox("Input here", frame, X, Y, ctrlPanel);
+        text = new TextBox("", frame, X, Y, ctrlPanel);
         humanBoard.repaint();
         cpuBoard.repaint();
         ctrlPanel.repaint();

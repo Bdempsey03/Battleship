@@ -17,7 +17,7 @@ public class TextBox extends JComponent{
     private int X;
     private int Y;
 //    private TextBoxHeader header = new TextBoxHeader(X, Y);
-    private JTextField field = new JTextField("Hello");
+    private JTextField field = new JTextField("");
     public static String userInput = "";
     private ControlPanel cp;
 

@@ -18,7 +18,7 @@ public class Run {
     public int length;
     public TreeSet<Integer> cpuBoardHits = new TreeSet<>(); //GOING TO USE THESE TO KEEP TRACK OF PLACES SHOT AT
     public TreeSet<Integer> humanBoardHits = new TreeSet<>();
-    public static Semaphore semaphore = new Semaphore(1);
+    public static Semaphore semaphore = new Semaphore(0);
 
     public static int cpuWinCount = 0;
     public static int gameCount = 0;
@@ -30,24 +30,26 @@ public class Run {
 
         Run run = new Run();
 
-        int response;
+        int response = 2;
 
+        /*
         do {
             System.out.println("Do you want to play Battleship (0) or simulate games (1)? ");
             response = sc.nextInt();
         }while(response!=0 && response!=1);
+        */
 
         if(response==1) {
-            run.simulate(5000, false, 0, 0);
-            run.simulate(5000, true, 0, 0);
-            run.simulate(5000, false, 1, 1);
-            run.simulate(5000, true, 1, 1);
-            run.simulate(5000, false, 1, 0);
-            run.simulate(5000, true, 1, 0);
+            run.simulate(ITERATIONS, false, 0, 0);
+            run.simulate(ITERATIONS, true, 0, 0);
+            run.simulate(ITERATIONS, false, 1, 1);
+            run.simulate(ITERATIONS, true, 1, 1);
+            run.simulate(ITERATIONS, false, 1, 0);
+            run.simulate(ITERATIONS, true, 1, 0);
         }else{
-            System.out.println("What difficulty? (0/1)");
-            response = sc.nextInt();
-            run.startGame(true, 1, response, true);
+//            System.out.println("What difficulty? (0/1)");
+//            response = sc.nextInt();
+            run.startGame(true, 1, response-1, true);
         }
 
     }
@@ -108,10 +110,11 @@ public class Run {
                     }else{
                         try {
                             semaphore.acquire();
+                            newestMove = new HumanMove(textToMove(gui.getCtrl().getRowTwoText())[0],textToMove(gui.getCtrl().getRowTwoText())[1]);//for human player
+
                         }catch(InterruptedException e){
                             System.out.println("Semaphore issues in Run");
                         }
-                        newestMove = new HumanMove(textToMove(gui.getCtrl().getRowTwoText())[0],textToMove(gui.getCtrl().getRowTwoText())[1]);//for human player
                     }
                 } while (humanBoardHits.contains(newestMove.getColumn() * 10 + newestMove.getRow()));
 
@@ -223,7 +226,7 @@ public class Run {
 //                    System.out.println(shipMaker[0] + " " + shipMaker[1] + " " + shipMaker[2] + " " + shipMaker[3]);
                     gui.repaint();
                 } catch (InterruptedException e) {
-                    System.out.println("Thread interrupted");
+                    System.out.println("Thread interrupted at end of RUN");
                 }
             }
         }
