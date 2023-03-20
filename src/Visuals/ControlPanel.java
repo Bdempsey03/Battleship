@@ -2,12 +2,15 @@ package Visuals;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.Semaphore;
 
 public class ControlPanel extends JComponent {
+
+
     private int X;
     private int Y;
     private String rowOneText = "";
-    private String rowTwoText = "";
+    private String rowTwoText = "FFF";
 
     private BasicStroke stroke = new BasicStroke((float)(X/100.));
     private BasicStroke stroke2 = new BasicStroke((float)(X/1000.));
@@ -34,10 +37,10 @@ public class ControlPanel extends JComponent {
         g2d.drawRect(X/100,Y/100,X-(2*X/100),Y-(2*Y/100));
 
         g2d.setStroke(stroke2);
-        g2d.setFont(new Font("Arial Black", Font.PLAIN, (X*Y/X+Y)/40));
-        g2d.scale(X/800., 3*Y/400.);//cahnge to 200. for GUIv1
+        g2d.setFont(new Font("Times New Roman", Font.BOLD, (X*Y/X+Y)/40));
+        g2d.scale(X/400., 3*Y/400.);//cahnge to 200. for GUIv1
         g2d.drawString(rowOneText, 10, 40);//change to 10 for GUIv1
-        g2d.drawString(rowTwoText, 10, 40 + ((X*Y)*2/(X+Y))/40);
+        g2d.drawString(rowTwoText, 10, 40 + ((X*Y)/(X+Y))/10);
         g2d.scale(800./X, 400*Y/3.);
 
     }
@@ -50,5 +53,9 @@ public class ControlPanel extends JComponent {
     public void setRowTwoText(String s){
         this.rowTwoText=s;
         repaint();
+    }
+
+    public String getRowTwoText() {
+        return rowTwoText;
     }
 }

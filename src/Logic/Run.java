@@ -1,10 +1,10 @@
 package Logic;
 import Visuals.GUI;
 import Visuals.GUIv2;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.TreeSet;
 import java.util.Scanner;
+import java.util.concurrent.Semaphore;
 
 public class Run {
 
@@ -18,6 +18,7 @@ public class Run {
     public int length;
     public TreeSet<Integer> cpuBoardHits = new TreeSet<>(); //GOING TO USE THESE TO KEEP TRACK OF PLACES SHOT AT
     public TreeSet<Integer> humanBoardHits = new TreeSet<>();
+    public static Semaphore semaphore = new Semaphore(1);
 
     public static int cpuWinCount = 0;
     public static int gameCount = 0;
@@ -46,7 +47,7 @@ public class Run {
         }else{
             System.out.println("What difficulty? (0/1)");
             response = sc.nextInt();
-            run.startGame(true, 0, response, true);
+            run.startGame(true, 1, response, true);
         }
 
     }
@@ -72,7 +73,7 @@ public class Run {
 
     }
 
-    public void startGame(boolean humanTurn, int cpu1Diff, int cpu2Diff, boolean humanPlayer) {
+    public void startGame(boolean humanTurn, int cpu1Diff, int cpu2Diff, boolean humanPlayer){
         int[] shipMaker = new int[4];
         if(humanPlayer)
             waitTime = 100; //waits 100ms before moving
@@ -83,7 +84,8 @@ public class Run {
         gui = new GUIv2(game.getHumanBoard(), game.getCpuBoard(), humanPlayer); //make gui
         gui.setup();
 
-        setUpShips(humanPlayer, game.getHumanBoard());//cpu setup on human board if not humanPlayer, else human sets up
+        //TODO change to isHuman
+        setUpShips(false, game.getHumanBoard());//cpu setup on human board if not humanPlayer, else human sets up
 
 //        setUpShips(true);//human setup ships
         setUpShips(false, game.getCpuBoard());//cpu setup ships
@@ -98,13 +100,18 @@ public class Run {
                     //START OF AI PART
                     if(!humanPlayer) {
                         try {
-                            newestMove = new SmartMove(cpu1Diff, game.cpuGameBoard);//for CPU
+                            newestMove = new SmartMove(cpu1Diff, game.humanGameBoard);//for CPU
                             Thread.currentThread().sleep(waitTime);
                         } catch (InterruptedException e) {
                             System.out.println("erorr at moves in RUN");
                         }//end of AI part
                     }else{
-                    newestMove = new HumanMove((char) sc.nextInt(), sc.nextInt());//for human player
+                        try {
+                            semaphore.acquire();
+                        }catch(InterruptedException e){
+                            System.out.println("Semaphore issues in Run");
+                        }
+                        newestMove = new HumanMove(textToMove(gui.getCtrl().getRowTwoText())[0],textToMove(gui.getCtrl().getRowTwoText())[1]);//for human player
                     }
                 } while (humanBoardHits.contains(newestMove.getColumn() * 10 + newestMove.getRow()));
 
@@ -113,14 +120,13 @@ public class Run {
 //                System.out.println(newestMove.getColumn()*10 + newestMove.getRow());
 //                System.out.println(humanBoardHits);
             } else {
-
                 try {
                     Thread.currentThread().sleep(waitTime*6);//temporary
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 do {
-                    newestMove = new SmartMove(cpu2Diff, game.humanGameBoard);
+                    newestMove = new SmartMove(cpu2Diff, game.cpuGameBoard, cpuBoardHits);
                 } while (cpuBoardHits.contains(newestMove.getColumn() * 10 + newestMove.getRow()));
 
                 game.cpu.fire(newestMove, game.getHumanBoard());
@@ -278,5 +284,13 @@ public class Run {
     }
     private void GUIVisible(boolean isVisible, GUI gui){
         gui.setVisible(isVisible);
+    }
+    private int[] textToMove(String text){
+        String s = text;
+        int row = s.charAt(0)-97;
+        int col = s.charAt(2)-48;
+        System.out.println(row + "_" + col);
+
+        return new int[]{row, col};
     }
 }

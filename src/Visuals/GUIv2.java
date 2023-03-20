@@ -29,7 +29,7 @@ public class GUIv2 {
         humanBoard = new Board(X/2, Y, humanGameBoard);
         cpuBoard = new Board(X/2, Y, cpuGameBoard);
         ctrlPanel = new ControlPanel(X, Y);
-        text = new TextBox("Input here", frame, 2*X/3, Y/4);
+        text = new TextBox("Input here", frame, 2*X/3, Y/4, ctrlPanel);
         humanBoard.repaint();
         cpuBoard.repaint();
         ctrlPanel.repaint();
