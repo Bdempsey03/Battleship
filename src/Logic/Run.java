@@ -92,6 +92,7 @@ public class Run {
         gui = new GUIv2(game.getHumanBoard(), game.getCpuBoard(), humanPlayer); //make gui
         gui.setup();
 
+
         //TODO change to isHuman
         try {
             setUpShips(false, game.getHumanBoard());//cpu setup on human board if not humanPlayer, else human sets up

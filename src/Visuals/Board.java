@@ -52,7 +52,7 @@ public class Board extends JComponent {
         g2d.drawRect(0,0,X,Y);
         for(int i = 0; i <= 10; i++){
             g2d.drawString((char)(i+96)+"", i*(X/11)+X/20, Y/20);
-            g2d.drawString(i+1+"", X/20, Y/10+i*(Y/11)+Y/20);
+            g2d.drawString(i+"", X/20, Y/10+i*(Y/11)+Y/20);
         }
 
 
@@ -101,19 +101,20 @@ public class Board extends JComponent {
                 int y = (gameBoard.getBoard((i / 10) - 1, i % 10)) == null ? 1 : (gameBoard.getBoard((i - 1) / 10, i % 10).status);
                 int z = (gameBoard.getBoard((i) / 10, (i % 10) - 1)) == null ? 1 : (gameBoard.getBoard((i - 1) / 10, i % 10).status);
 
-                if ((x == 2 || x == 3 || x == 4 || x == 5 || x == 6 || x == 7 || x == 8 || x == 9))
+                if ((x == 2 || x == 3 || x == 4 || x == 5 || x == 6 || x == 7 || x == 8 || x == 9 || x == 10 || x == 11))
 //                    &&(y!=x)&&(z!=x))
                 {
 //                drawShip(g2d, i/10 * (X/10) , i%10 * (Y/10));
                     if (x == 2 || x == 3)
-//                            && y != 2 && y != 3)
-                        g2d.setColor(Color.ORANGE);
+                        g2d.setColor(new Color(128, 128,128));
                     if (x == 4 || x == 5)
-                        g2d.setColor(Color.RED);
+                        g2d.setColor(new Color(118, 168,128));
                     if (x == 6 || x == 7)
-                        g2d.setColor(Color.GREEN);
+                        g2d.setColor(new Color(128, 128,178));
                     if (x == 8 || x == 9)
-                        g2d.setColor(Color.MAGENTA);
+                        g2d.setColor(new Color(128, 88,128));
+                    if (x == 10 || x == 11)
+                        g2d.setColor(new Color(128, 128,78));
                     g2d.fillRect(i / 10 * (X / 10)+(X/10), i % 10 * (Y / 10)+(Y/10), X / 10, Y / 10);
                 }
             }

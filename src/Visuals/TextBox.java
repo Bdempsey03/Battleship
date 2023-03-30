@@ -31,7 +31,7 @@ public class TextBox extends JComponent{
         field.setBackground(Color.GRAY);
         this.add(field);
 //        this.add(header);
-        field.setSize(X, Y);
+        field.setSize(this.X, this.Y);
         field.setFont(new Font("Times New Roman", Font.BOLD, 100));
 //        header.setSize(X, Y);
         field.addKeyListener( new KeyAdapter() {
@@ -54,12 +54,12 @@ public class TextBox extends JComponent{
     }
 
     protected void paintComponent(Graphics g){
-//        header.repaint();
         field.repaint();
     }
     public void setDimension(int width, int height) {
         X = width;
         Y = height;
+        field.setSize(this.X, this.Y);
     }
 }
 

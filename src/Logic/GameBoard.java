@@ -8,12 +8,14 @@ Key:
     1 = no ship
     2 = horizontal two boat
     3 = vertical 2 boat
-    4 = horizontal 3 boat
-    5 = vertical 3 boat
+    4 = horizontal 3 cruiser
+    5 = vertical 3 cruiser
     6 = horizontal 4 boat
     7 = vertical 4 boat
     8 = horizontal 5 boat
     9 = vertical 5 boat
+    10 = horizontal submarine
+    11 = vertical submarine
 
  */
 
@@ -25,6 +27,8 @@ Key:
     public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
     public static final String ANSI_RESET = "\u001B[0m";
 
+
+    private boolean subPlaced = false;
 
 
 
@@ -41,7 +45,7 @@ Key:
       }
 
     public Tile getBoard(int x, int y) {
-        if(x<0||x>9||y<0||y>9)
+        if(x<0||x>11||y<0||y>11)
             return null;
         return board[x][y];
     }
@@ -66,15 +70,16 @@ Key:
         board[row][column].status = status;
     }
     public void addShip(int headLocationX, int headLocationY, int orientation, int length){
-
         int status = 0;
 
         switch (length) {
             case 2 -> status = 2;
-            case 3 -> status = 4;
+            case 3 -> status = subPlaced?4:10;
             case 4 -> status = 6;
             case 5 -> status = 8;
         }
+        if(length==3)
+            subPlaced=true;
         if(orientation == 1)//if vertical
             status++;
 

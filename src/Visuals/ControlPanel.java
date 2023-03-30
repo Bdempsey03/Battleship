@@ -82,14 +82,14 @@ public class ControlPanel extends JComponent {
         g2d.drawImage(destroyer, 5*X/8, 3*Y/7, null);
         if(!board.hasShip(4) && !board.hasShip(5)) {
             g2d.setColor(Color.red);
-            g2d.drawLine(4 * X / 8, 3 * Y / 7, 4 * X / 8 + X / 15, 3 * Y / 7 + 2*Y /5);
+            g2d.drawLine(5 * X / 8, 3 * Y / 7, 5 * X / 8 + X / 15, 3 * Y / 7 + 2*Y /5);
             g2d.setColor(Color.BLACK);
         }
         g2d.scale(1,6/7.);
         g2d.drawImage(submarine, 6*X/8, Y/2, null);
-        if(!board.hasShip(4) && !board.hasShip(5)) {
+        if(!board.hasShip(10) && !board.hasShip(11)){
             g2d.setColor(Color.red);
-            g2d.drawLine(4 * X / 8, 3 * Y / 7, 4 * X / 8 + X / 15, 3 * Y / 7 + 2*Y /5);
+            g2d.drawLine(6 * X / 8, 4 * Y / 7 - Y/20, 6 * X / 8 + X / 15, 3 * Y / 7 + 2*Y /5);
             g2d.setColor(Color.BLACK);
         }
         g2d.scale(1,7/6.);
@@ -97,7 +97,7 @@ public class ControlPanel extends JComponent {
         g2d.drawImage(patrol, 7*X/8, 6*Y/21, null);
         if(!board.hasShip(2) && !board.hasShip(3)) {
             g2d.setColor(Color.red);
-            g2d.drawLine(4 * X / 8, 3 * Y / 7, 4 * X / 8 + X / 15, 3 * Y / 7 + 2*Y /5);
+            g2d.drawLine(7 * X / 8, 2 * Y / 7, 7 * X / 8 + X / 15, 2 * Y / 40 + 2*Y /5);
             g2d.setColor(Color.BLACK);
         }
         g2d.scale(1, 2/3.);
