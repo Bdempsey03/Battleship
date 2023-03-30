@@ -39,15 +39,16 @@ public class TextBox extends JComponent{
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
                         userInput = field.getText();
-                        if((userInput.length()>2) &&
-                        (!((userInput.charAt(0)<97 || userInput.charAt(0)>107) &&
-                                (userInput.charAt(2)<49 || userInput.charAt(2)>59)))) {//checking that the input is valid
+//                        if((userInput.length()>2) &&
+//                        (!((userInput.charAt(0)<97 || userInput.charAt(0)>107) &&
+//                                (userInput.charAt(2)<49 || userInput.charAt(2)>59))))
+//                        {//checking that the input is valid
                             field.setText("");
                             cp.setRowTwoText(userInput);
                             semaphore.release();
-                        }else{
-                            cp.setRowOneText("Invalid move. Please input (a-i)-(1-10)");
-                }
+//                        }else{
+//                            cp.setRowOneText("Invalid move. Please input (a-i)-(1-10)");
+//                }
                 }}});
         f.add(this);
     }

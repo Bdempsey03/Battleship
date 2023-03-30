@@ -13,7 +13,6 @@ public class Run {
     public boolean humanTurn;
     public static Scanner sc = new Scanner(System.in);
     public Move newestMove;
-    public int numberOfShips = 5;
     public String ship;
     public int length;
     public TreeSet<Integer> cpuBoardHits = new TreeSet<>(); //GOING TO USE THESE TO KEEP TRACK OF PLACES SHOT AT
@@ -53,6 +52,14 @@ public class Run {
         }
 
     }
+
+    /**
+     * For simulating games without a gui. For analyzing algorithms.
+     * @param iterations iterations
+     * @param fair cpu goes first each time or split 50/50
+     * @param cpu1Diff difficulty 1
+     * @param cpu2Diff difficulty 2
+     */
     public void simulate(int iterations, boolean fair, int cpu1Diff, int cpu2Diff){
         cpuWinCount = 0;
         gameCount = 0;
@@ -76,7 +83,6 @@ public class Run {
     }
 
     public void startGame(boolean humanTurn, int cpu1Diff, int cpu2Diff, boolean humanPlayer){
-        int[] shipMaker = new int[4];
         if(humanPlayer)
             waitTime = 100; //waits 100ms before moving
 
@@ -87,11 +93,14 @@ public class Run {
         gui.setup();
 
         //TODO change to isHuman
-        setUpShips(false, game.getHumanBoard());//cpu setup on human board if not humanPlayer, else human sets up
+        try {
+            setUpShips(false, game.getHumanBoard());//cpu setup on human board if not humanPlayer, else human sets up
 
 //        setUpShips(true);//human setup ships
-        setUpShips(false, game.getCpuBoard());//cpu setup ships
-
+            setUpShips(false, game.getCpuBoard());//cpu setup ships
+        }catch(InterruptedException e){
+            System.out.println("Error in Run setup ships");
+        }
 
 //        System.out.println(game.getCpuBoard());
         while (!winConditionMet(game.getCpuBoard(), game.getHumanBoard())[0]) {//change to win condition later
@@ -148,7 +157,7 @@ public class Run {
         cpuBoardHits.clear();
     }
 
-    public void setUpShips(boolean isHuman, GameBoard board) {
+    public void setUpShips(boolean isHuman, GameBoard board) throws InterruptedException {
         int[] shipMaker = new int[4];
         if (isHuman) {
             for (int i = 0; i < 5; i++) {//Human placing their own ships
@@ -174,15 +183,18 @@ public class Run {
                         length = 2;
                 }
                 do {
-                    gui.getCtrl().setRowOneText("Please select locations for your" + ship + "!\n start of ship x:");
+                    gui.getCtrl().setRowOneText("Enter "+ship+" location");
                     gui.repaint();
-                    shipMaker[0] = sc.nextInt();
+                    System.out.println("HERE");
+                    semaphore.acquire();
+                    System.out.println("HEREEE");
+                    shipMaker[0] = gui.getCtrl().getRowTwoText().charAt(0)-97;
                     gui.getCtrl().setRowOneText("Please select locations for your" + ship + "!\n start of ship y:");
                     gui.repaint();
-                    shipMaker[1] = sc.nextInt();
+                    shipMaker[1] = gui.getCtrl().getRowTwoText().charAt(2)-48;
                     gui.getCtrl().setRowOneText("Please select locations for your" + ship + "!\n orientation:");
                     gui.repaint();
-                    shipMaker[2] = sc.nextInt();
+                    shipMaker[2] = gui.getCtrl().getRowTwoText().charAt(4)-48;
                     shipMaker[3] = length;
                 } while (!Game.legalPlacement(board, shipMaker[0], shipMaker[1], shipMaker[3], shipMaker[2]));
                 board.addShip(shipMaker[0], shipMaker[1], shipMaker[2], shipMaker[3]);

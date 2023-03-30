@@ -26,7 +26,7 @@ public class GUI {
         this.humanGameBoard = humanGameBoard;
         humanBoard = new Board(X, Y, humanGameBoard);
         cpuBoard = new Board(X, Y, cpuGameBoard);
-        ctrlPanel = new ControlPanel(X, Y);
+        ctrlPanel = new ControlPanel(X, Y, humanGameBoard);
         text = new TextBox("", frame, X, Y, ctrlPanel);
         humanBoard.repaint();
         cpuBoard.repaint();

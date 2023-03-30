@@ -108,5 +108,14 @@ Key:
     public boolean isHuman(){
         return isHuman;
     }
-
+    public boolean hasShip(int ship){
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                if(board[i][j].getStatus()==ship && !board[i][j].isHit()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -1,5 +1,7 @@
 package Visuals;
 
+import Logic.GameBoard;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class ControlPanel extends JComponent {
+
+    private GameBoard board;
 
 
     private int X;
@@ -18,10 +22,10 @@ public class ControlPanel extends JComponent {
     private BasicStroke stroke = new BasicStroke((float)(X/100.));
     private BasicStroke stroke2 = new BasicStroke((float)(X/1000.));
 
-    Font font;
+    private Font font;
 
-    GraphicsEnvironment ge;
-
+    private double fontScalerX = 1;
+    private double fontScalerY = 1;
 
     private BufferedImage battleship;
     private BufferedImage aircraftcarrier;
@@ -31,7 +35,8 @@ public class ControlPanel extends JComponent {
 
 
 
-    public ControlPanel(int X, int Y){
+    public ControlPanel(int X, int Y, GameBoard board){
+        this.board = board;
         this.X = X;
         this.Y = Y;
         setImages();
@@ -52,9 +57,9 @@ public class ControlPanel extends JComponent {
 //        g2d.scale(2/3., 2/3.);
         g2d.setFont(font);
         g2d.setColor(Color.RED);
-//        g2d.scale(X/800., 1);
-        g2d.drawString("Opponent Remaining Ships:", 5*Y/7, 5*Y/14);
-//        g2d.scale(1,1);
+        g2d.scale(X/700., Y/600.);
+        g2d.drawString("Opponent Remaining Ships:", 5*Y/7, (int)((5*Y/14) * (600./Y)));
+        g2d.scale(700./X,600./Y);
         g2d.setColor(Color.BLACK);
         g2d.fillRect(3*X/8 - (X/50), 3*Y/7 - (Y/30), 5*X/8, 4*Y/7 );
         g2d.setColor(Color.white);
@@ -63,13 +68,38 @@ public class ControlPanel extends JComponent {
 
         g2d.setColor(Color.BLACK);
         g2d.drawImage(aircraftcarrier, 3*X/8, 3*Y/7, null);
+        if(!board.hasShip(8) && !board.hasShip(9)) {
+            g2d.setColor(Color.red);
+            g2d.drawLine(3 * X / 8, 3 * Y / 7, 3 * X / 8 + X / 10, 3 * Y / 7 + Y / 2);
+            g2d.setColor(Color.BLACK);
+        }
         g2d.drawImage(battleship, 4*X/8, 3*Y/7, null);
+        if(!board.hasShip(6) && !board.hasShip(7)) {
+            g2d.setColor(Color.red);
+            g2d.drawLine(4 * X / 8, 3 * Y / 7, 4 * X / 8 + X / 15, 3 * Y / 7 + 2*Y /5);
+            g2d.setColor(Color.BLACK);
+        }
         g2d.drawImage(destroyer, 5*X/8, 3*Y/7, null);
+        if(!board.hasShip(4) && !board.hasShip(5)) {
+            g2d.setColor(Color.red);
+            g2d.drawLine(4 * X / 8, 3 * Y / 7, 4 * X / 8 + X / 15, 3 * Y / 7 + 2*Y /5);
+            g2d.setColor(Color.BLACK);
+        }
         g2d.scale(1,6/7.);
         g2d.drawImage(submarine, 6*X/8, Y/2, null);
+        if(!board.hasShip(4) && !board.hasShip(5)) {
+            g2d.setColor(Color.red);
+            g2d.drawLine(4 * X / 8, 3 * Y / 7, 4 * X / 8 + X / 15, 3 * Y / 7 + 2*Y /5);
+            g2d.setColor(Color.BLACK);
+        }
         g2d.scale(1,7/6.);
         g2d.scale(1,3/2.);
         g2d.drawImage(patrol, 7*X/8, 6*Y/21, null);
+        if(!board.hasShip(2) && !board.hasShip(3)) {
+            g2d.setColor(Color.red);
+            g2d.drawLine(4 * X / 8, 3 * Y / 7, 4 * X / 8 + X / 15, 3 * Y / 7 + 2*Y /5);
+            g2d.setColor(Color.BLACK);
+        }
         g2d.scale(1, 2/3.);
 //        g2d.scale(3/2.,3/2.);
 
@@ -78,6 +108,7 @@ public class ControlPanel extends JComponent {
         g2d.setStroke(stroke2);
         g2d.scale(X/400., 3*Y/400.);//cahnge to 200. for GUIv1
         g2d.drawString(rowOneText, 10, 40);//change to 10 for GUIv1
+        g2d.scale(fontScalerX, fontScalerY);
         g2d.drawString(rowTwoText, 10, 40 + ((X*Y)/(X+Y))/10);
         g2d.scale(400. * X, (Y/3.) *400);
 
@@ -107,7 +138,7 @@ public class ControlPanel extends JComponent {
             patrol = ImageIO.read(new File("src\\Visuals\\Images\\Patrol.png"));
 
             font = Font.createFont(Font.TRUETYPE_FONT, new File("src\\Visuals\\Font\\digital-7.ttf"));
-            font = font.deriveFont(Font.BOLD,28);
+            font = font.deriveFont(Font.BOLD,20);
             GraphicsEnvironment ge;
             ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(font);
