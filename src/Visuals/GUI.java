@@ -3,18 +3,23 @@ package Visuals;
 import Logic.GameBoard;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+/**
+ * This class is part of Battleship for Ben Dempsey's CPSC 281 - Winter 2023 Final project.
+ *
+ * Graphical user interface for Battleship
+ */
 public class GUI {
-    private JFrame frame = new JFrame();
-    private int X = 600;
-    private int Y = 400;
+    private final JFrame frame = new JFrame("Battleship");
+    private int X = 900;//size
+    private int Y = 600;
 
 
     private GameBoard humanGameBoard;
     private GameBoard cpuGameBoard;
+    private final boolean isVisible;
 
 
     protected Board humanBoard;
@@ -22,21 +27,31 @@ public class GUI {
     protected ControlPanel ctrlPanel;
     protected TextBox text;
 
-    public GUI(GameBoard humanGameBoard, GameBoard cpuGameBoard){
+    /**
+     * Constructor for battleship GUI
+     * @param humanGameBoard the user's board
+     * @param cpuGameBoard the CPU's game board
+     * @param visible set false if simulating game without gui
+     */
+    public GUI(GameBoard humanGameBoard, GameBoard cpuGameBoard, boolean visible){
+        this.isVisible = visible;
         this.humanGameBoard = humanGameBoard;
-        humanBoard = new Board(X, Y, humanGameBoard);
-        cpuBoard = new Board(X, Y, cpuGameBoard);
-        ctrlPanel = new ControlPanel(X, Y, humanGameBoard);
-        text = new TextBox("", frame, X, Y, ctrlPanel);
+        humanBoard = new Board(X/2, Y, humanGameBoard);
+        cpuBoard = new Board(X/2, Y, cpuGameBoard);
+        ctrlPanel = new ControlPanel(X, Y, cpuGameBoard);
+        text = new TextBox("", frame, 2*X/3, Y/4, ctrlPanel);
         humanBoard.repaint();
         cpuBoard.repaint();
         ctrlPanel.repaint();
         text.repaint();
     }
 
+    /**
+     * Gets everything set up for the battleship GUI
+     */
     public void setup(){
         frame.setSize(X, Y);
-        frame.setLayout(null);
+        frame.setLayout(null);//chose null because it is more versatile
         frame.add(humanBoard);
         frame.add(cpuBoard);
         frame.add(ctrlPanel);
@@ -44,37 +59,42 @@ public class GUI {
 
 
 
-        frame.setVisible(true);
-        //^^^CONTROLED IN RUN
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setVisible(isVisible);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        /*
+        When we resize the window we have to resize all the individual components and call repaint on them
+         */
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
-                X=frame.getContentPane().getWidth();
+                X=frame.getContentPane().getWidth();//every time we resize we get the new size
                 Y=frame.getContentPane().getHeight();
-                cpuBoard.setDimension(X/2, 3*Y/4);
-                humanBoard.setDimension(X/2, 3*Y/4);
-                ctrlPanel.setDimension(X,Y/4);//change in control panel if using this GUI
-                text.setSize(X/4, Y/4);
+                cpuBoard.setDimension(X/3, Y/2);//resizing all components
+                humanBoard.setDimension(X/3, Y/2);
+                ctrlPanel.setDimension(2*X/3,3*Y/4);
+                text.setDimension(2*X/3, Y/4);
 
 
-                cpuBoard.setBounds(0, 0, X/2, 3*Y/4);
-                humanBoard.setBounds(X/2, 0, X/2, 3*Y/4);
-                ctrlPanel.setBounds(X/4, 3*Y/4, X, Y/4);
-                text.setBounds(0, 3*Y/4, X/4, Y/4);
+                cpuBoard.setBounds(0, 0, X/3, Y/2);
+                humanBoard.setBounds(0, Y/2, X/3, Y/2);
+                ctrlPanel.setBounds(X/3, 0, X*2/3, 3*Y/4);
+                text.setBounds(X/3, 3*Y/4, 2*X/3, Y/4);
 
-                repaint();
+                repaint();//calls repaint for all components
             }
         });
-        repaint();
+        repaint();//only needed for initial setup
     }
 
 
+    /**
+     * Repaints all children
+     */
     public void repaint() {
-        ctrlPanel.repaint();
         cpuBoard.repaint();
         humanBoard.repaint();
         text.repaint();
+        ctrlPanel.repaint();
     }
     public ControlPanel getCtrl(){
         return ctrlPanel;
@@ -83,5 +103,4 @@ public class GUI {
     public void setVisible(boolean visible){
         frame.setVisible(visible);
     }
-    //    public JTextArea getTextBox(){return textBox;}
 }
